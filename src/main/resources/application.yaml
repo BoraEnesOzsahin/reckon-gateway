@@ -1,0 +1,13 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: reckon-gateway
+    cloud:
+      gateway:
+        routes:
+          - id: UserAuthenticationService
+            uri : http://localhost:8083
+            predicates:
+              - Path=/api/v1/auth/**
