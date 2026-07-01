@@ -2,7 +2,9 @@ version: '3.8'
 
 services:
   eureka-server:
-    image: your-eureka-image-name # Kendi imaj adınla değiştir
+    build:
+      context: ../eureka-server
+      dockerfile: Dockerfile # Kendi imaj adınla değiştir
     container_name: eureka-server
     ports:
       - "8761:8761"
@@ -20,7 +22,9 @@ services:
       - eureka-server
 
   user-authentication-service:
-    image: your-auth-image-name
+    build:
+      context: ../UserAuthenticationService
+      dockerfile: Dockerfile
     container_name: UserAuthenticationService
     networks:
       - reckon-arc
@@ -28,17 +32,15 @@ services:
       - eureka-server
 
   cold-wallet-manager-service:
-    image: your-wallet-image-name
+    build:
+      context: ../ColdWalletManager
+      dockerfile: Dockerfile
     container_name: Cold-Wallet-Manager-Service
     networks:
       - reckon-arc
     depends_on:
       - eureka-server
 
-# reckon-arc network'ünü burada tanımlıyoruz
 networks:
   reckon-arc:
-    # Eğer bu network'ü terminalden 'docker network create reckon-arc' diyerek 
-    # manuel oluşturduysan 'external: true' yapmalısın. 
-    # Eğer docker-compose'un kendisinin oluşturmasını istiyorsan 'driver: bridge' kullanabilirsin.
-    external: true
+    driver: bridge
